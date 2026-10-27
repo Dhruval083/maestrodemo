@@ -1,0 +1,47 @@
+# ================================================
+# Maestro Web Test: Login with API Delay
+# ================================================
+# Tests that Maestro correctly waits for a 3-second
+# simulated API response before asserting the
+# Dashboard is visible. No manual sleep() needed!
+#
+# Run: maestro test .maestro/login-with-delay.yaml
+# ================================================
+
+url: http://localhost:5173
+---
+
+# Step 1: Launch and verify Login page
+- launchApp
+- assertVisible: "Login"
+
+# Step 2: Enter valid credentials
+- tapOn:
+    id: "username"
+- inputText: "test"
+
+- tapOn:
+    id: "password"
+- inputText: "test1234"
+
+# Step 3: Click Sign In
+- tapOn: "Sign In"
+
+# Step 4: Verify loading state appears (button text changes)
+- assertVisible: "Signing In..."
+
+# Step 5: Wait for Dashboard — Maestro auto-retries!
+# The API takes 3 seconds, but Maestro keeps polling
+# until "Dashboard" appears (no sleep needed).
+- extendedWaitUntil:
+    visible: "Dashboard"
+    timeout: 10000
+
+# Step 6: Verify full Dashboard content
+- assertVisible: "Welcome! You have successfully logged in."
+- assertVisible: "Logout"
+
+# Step 7: Logout and verify return to Login
+- tapOn: "Logout"
+- assertVisible: "Login"
+- assertVisible: "Sign In"

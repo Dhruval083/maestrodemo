@@ -1,0 +1,47 @@
+# ================================================
+# Maestro Web Test: Full Login Flow
+# ================================================
+# Tests the complete login → dashboard → logout flow
+# using valid mock credentials (test / test1234).
+#
+# Prerequisites:
+#   1. Start the React dev server: npm run dev
+#   2. Run: maestro test .maestro/login-flow.yaml
+# ================================================
+
+url: http://localhost:5173
+---
+
+# Step 1: Launch the app in the browser
+- launchApp
+
+# Step 2: Verify the Login page is visible
+- assertVisible: "Login"
+- assertVisible: "Username"
+- assertVisible: "Password"
+- assertVisible: "Sign In"
+
+# Step 3: Enter username
+- tapOn:
+    id: "username"
+- inputText: "test"
+
+# Step 4: Enter password
+- tapOn:
+    id: "password"
+- inputText: "test1234"
+
+# Step 5: Click Sign In
+- tapOn: "Sign In"
+
+# Step 6: Verify we navigated to the Dashboard
+- assertVisible: "Dashboard"
+- assertVisible: "Welcome! You have successfully logged in."
+- assertVisible: "Logout"
+
+# Step 7: Click Logout
+- tapOn: "Logout"
+
+# Step 8: Verify we're back on the Login page
+- assertVisible: "Login"
+- assertVisible: "Sign In"

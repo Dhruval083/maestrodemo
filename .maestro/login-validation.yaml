@@ -1,0 +1,39 @@
+# ================================================
+# Maestro Web Test: Login Validation Errors
+# ================================================
+# Tests that validation errors appear when
+# submitting with empty fields.
+#
+# Run: maestro test .maestro/login-validation.yaml
+# ================================================
+
+url: http://localhost:5173
+---
+
+# Launch the app
+- launchApp
+
+# Verify the Login page is loaded
+- assertVisible: "Login"
+
+# Test 1: Submit with both fields empty
+- tapOn: "Sign In"
+- assertVisible: "Username is required"
+- assertVisible: "Password is required"
+
+# Test 2: Enter only username, leave password empty
+- tapOn:
+    id: "username"
+- inputText: "test"
+- tapOn: "Sign In"
+- assertVisible: "Password is required"
+
+# Test 3: Clear username, enter only password
+- tapOn:
+    id: "username"
+- eraseText: 10
+- tapOn:
+    id: "password"
+- inputText: "test1234"
+- tapOn: "Sign In"
+- assertVisible: "Username is required"
